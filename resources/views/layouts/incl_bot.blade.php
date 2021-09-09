@@ -9,8 +9,8 @@
     <script src="{{asset('assets/js/core/js.cookie.min.js')}}"></script>
     <script src="{{asset('assets/js/codebase.js')}}"></script>
 
-    {{-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
     <!-- Page JS Plugins -->
+    <script src="{{asset('assets/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
     <script src="{{asset('assets/js/plugins/chartjs/Chart.bundle.min.js')}}"></script>
     <script src="{{asset('assets/js/plugins/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('assets/js/plugins/datatables/dataTables.bootstrap4.min.js')}}"></script>
@@ -21,5 +21,6 @@
     <!-- Page JS Code -->
     <script src="{{asset('assets/js/pages/be_pages_dashboard.js')}}"></script>
     <script src="{{asset('assets/js/pages/be_tables_datatables.js')}}"></script>
+
 
 

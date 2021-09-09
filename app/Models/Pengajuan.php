@@ -12,4 +12,12 @@ class Pengajuan extends Model
         'user_acc','status','jumlah_cuti','keterangan','keterangan_acc',
 
     ];
+    public $timestamps = false;
+    protected $primaryKey = 'number';
+    const CREATED_AT = 'tgl_input';
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_acc');
+    }
 }

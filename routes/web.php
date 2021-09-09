@@ -34,8 +34,9 @@ Route::group(['prefix' => 'cuti'],function(){
 
 Route::group(['prefix' => 'pengajuan'],function(){
     Route::get('/','PengajuanCutiController@index')->name('pengajuan.index');
-    Route::post('/store','PengajuanController@store')->name('pengajuan.store');
-    Route::get('/edit/{id}','PengajuanController@edit')->name('pengajuan.edit');
-    Route::put('/update/{id}','PengajuanController@update')->name('pengajuan.update');
-    Route::delete('/delete/{id}','PengajuanController@delete')->name('pengajuan.delete');
+    Route::get('/data','PengajuanCutiController@data')->name('pengajuan.data');
+    Route::post('/store','PengajuanCutiController@store')->name('pengajuan.store');
+    Route::get('/edit/{id}','PengajuanCutiController@edit')->name('pengajuan.edit');
+    Route::put('/update/{id}','PengajuanCutiController@update')->name('pengajuan.update');
+    Route::delete('/delete/{number}','PengajuanCutiController@delete')->name('pengajuan.delete');
 });

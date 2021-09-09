@@ -18,15 +18,16 @@ class CreatePengajuansTable extends Migration
             $table->date('tgl_awal');
             $table->date('tgl_akhir');
             $table->timestamp('tgl_input', $precision = 0);
-            $table->datetime('tgl_acc');
+            $table->datetime('tgl_acc')->nullable();
             $table->unsignedBigInteger('user_input');
-            $table->unsignedBigInteger('user_acc');
-            $table->enum('status',[0,1]);
+            $table->unsignedBigInteger('user_acc')->nullable();
+            $table->enum('status',[0,1])->nullable();
             $table->integer('jumlah_cuti');
             $table->string('keterangan');
-            $table->string('keterangan_acc');
+            $table->string('keterangan_acc')->nullable();
             $table->foreign('user_input')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('user_acc')->references('id')->on('users')->onDelete('cascade');
+            $table->dropColumn('updated_at');
         });
     }
 

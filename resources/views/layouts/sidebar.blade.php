@@ -80,7 +80,7 @@
                             <a class="" href="#"><i class="si si-home"></i><span class="sidebar-mini-hide">Dashboards</span></a>
                         </li>
                         <li class="">
-                            <a class="" data-toggle="" href=""><i class="si si-cup"></i><span class="sidebar-mini-hide">Pengajuan Cuti</span></a>
+                            <a class="" data-toggle="" href="{{route('pengajuan.index')}}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Pengajuan Cuti</span></a>
                         </li>
 
                     </ul>

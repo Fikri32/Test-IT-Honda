@@ -181,6 +181,7 @@
                 text  : 'Data Yang Sudah Dihapus Tidak Akan Bisa Dikembalikan',
                 icon  : 'warning',
                 showConfirmButton : true,
+                showCancelButton :true,
                 confirmButtonText: 'Ya, Hapus!',
                 cancelButtonText: 'Tidak, Batalkan!',
                 allowOutsideClick: false,
