@@ -13,6 +13,7 @@ class Pengajuan extends Model
 
     ];
     public $timestamps = false;
+    protected $keyType = 'string';
     protected $primaryKey = 'number';
     const CREATED_AT = 'tgl_input';
 
@@ -20,4 +21,26 @@ class Pengajuan extends Model
     {
         return $this->belongsTo(User::class, 'user_acc');
     }
+
+    // public static function generateNumber()
+    // {
+    //     parent::boot();
+
+    //         // dd($no);
+    //     static::creating(function($model){
+    //             $no = 'PC201900000';
+    //             $prefix = substr($no,0,6);
+    //             $postfix = substr($no,-5);
+    //             $last = Pengajuan::latest('tgl_input')->first();
+    //             if($last->exists())
+    //             {
+    //                 $number = $prefix.str_pad(intval($postfix) + 1,5,0,STR_PAD_LEFT);
+    //                 $model->number = $number;
+    //             }
+
+
+    //     });
+
+    // }
+
 }

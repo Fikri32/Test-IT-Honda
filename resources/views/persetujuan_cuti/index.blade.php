@@ -3,7 +3,7 @@
 @section('content')
  <div class="block  ml-auto mr-auto">
     <div class="block-header block-header-default">
-        <h3 class="block-title">Cuti Master Index</h3>
+        <h3 class="block-title">Persetujuan Cuti Index</h3>
         <div class="block-options">
             <button type="button" class="btn-block-option">
                 <i class="si si-wrench"></i>
@@ -11,44 +11,83 @@
         </div>
     </div>
     <div class="block-content">
-        <a class="btn btn-primary m-3" id="tambah" name="tambah" href="javascript:;" data-toggle="modal" data-target="#cutiModal">
-            Add Cuti
-        </a>
-        <table class="table table-bordered" id="cuti">
+        <table class="table table-bordered" id="persetujuan">
         <thead>
             <tr>
-                <th>id</th>
-                <th>Nama</th>
-                <th>Sisa Cuti</th>
-                <th>Tahun</th>
+                <th>Nomor</th>
+                <th>Tanggal Awal</th>
+                <th>Tanggal Akhir</th>
+                <th>Cuti(Hari)</th>
+                <th>Keterangan</th>
                 <th>Action</th>
             </tr>
         </thead>
     </table>
     </div>
 </div>
-<div id="cutiModal" class="modal fade" role="dialog">
+<div id="persetujuanModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Form Cuti</h4>
+                <h4 class="modal-title">Form Persetujuan Cuti</h4>
                 <button type="button" class="close" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
-                <form action="" method="post" name="frm_add" id="frm_add">
+                <form autocomplete="off" action="" method="post" name="frm_add" id="frm_add">
                     {{ csrf_field() }}
-                    <div class="form-group">
-                        <label for="">Nama Karyawan</label>
-                        <select name="id_user" id="id_user" class="id_user form-control">
-                        </select>
+                    <div class="form-group row">
+                        <label class="col-12" for="example-daterange1">Tanggal Cuti</label>
+                        <div class="col-lg-12">
+                            <div class="input-daterange input-group js-datepicker-enabled" data-date-format="yyyy/mm/dd" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                <input type="text" class="form-control" id="tgl_awal" name="tgl_awal" placeholder="From" data-week-start="1" data-autoclose="true" data-today-highlight="true" disabled>
+                                <span class="input-group-addon font-w600">to</span>
+                                <input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir" placeholder="To" data-week-start="1" data-autoclose="true" data-today-highlight="true" disabled>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="">Jumlah Cuti</label>
-                        <input type="text" class="form-control" name="sisa_cuti" id="sisa_cuti" >
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label id="sisa_cuti" for=""></label>
+                                <label for="">Jumah Cuti</label>
+                                <input type="hidden" class="form-control" id="jml_cuti" name="jml_cuti">
+                                <input type="text" class="form-control" id="jumlah_cuti" name="jumlah_cuti" readonly>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="form-group">
+                                <label for="">Keterangan</label>
+                                <textarea name="keterangan" class="form-control" id="keterangan" cols="5" rows="4" disabled></textarea>
+                            </div>
+                        </div>
+                        <hr>
+
                     </div>
-                    <div class="form-group">
-                        <label for="">Tahun</label>
-                        <input type="text" class="form-control" name="tahun" id="tahun" >
+                    <hr>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label class="col-12">Persetujuan</label>
+                                <div class="col-12">
+                                    <label class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="status" name="status" value="1" checked="">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Ya</span>
+                                    </label>
+                                    <label class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="status" name="status" value="0">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Tidak</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="form-group">
+                                <label for="">Keterangan Diterima</label>
+                                <textarea name="keterangan_acc" class="form-control" id="keterangan_acc" cols="5" rows="4"></textarea>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -65,54 +104,52 @@
     $(document).ready(function(){
         var idEdit = 0;
 
-        $('#tambah').click(function () {
+         $('body').on('click','.detail',function(){
+            var id = $(this).attr('data-id');
+            var url = '{{ route("persetujuan.detail",":id") }}'
+            url = url.replace(':id',id)
 
-            $('#frm_add').trigger("reset");
-
-            $('#cutiModal').modal('show');
-
-        });
+            $.ajax({
+                type : 'GET',
+                url : url,
+                success:function(data){
+                    idEdit = data.number;
+                    $('#persetujuanModal').modal('show');
+                    $('#tgl_awal').val(data.tgl_awal);
+                    $('#tgl_akhir').val(data.tgl_akhir);
+                    $('#keterangan').val(data.keterangan);
+                    $('#jumlah_cuti').val(data.jumlah_cuti);
+                    }
+            })
+        })
 
     // Data
-        var table = $('#cuti').DataTable({
+        var table = $('#persetujuan').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('cuti.data') }}",
+                ajax: "{{ route('persetujuan.data') }}",
                 columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'nama', name: 'nama' },
-                    { data: 'sisa_cuti', name: 'sisa-cuti' },
-                    { data: 'tahun', name: 'tahun' },
+                    { data: 'number', name: 'number' },
+                    { data: 'tgl_awal', name: 'tgl_awal' },
+                    { data: 'tgl_akhir', name: 'tgl_akhiri' },
+                    { data: 'jumlah_cuti', name: 'jumlah_cuti'},
+                    { data: 'keterangan', name: 'keterangan' },
                     { data: 'action', name: 'action', orderable: false, searchable: false}
                 ]
         });
     // End Data
 
-    // Get Karyawan
-        $.ajax({
-            url:"{{ route('cuti.karyawan') }}",
-            type:'GET',
-            success:function(res){
-                $("#id_user").empty();
-                $("#id_user").append('<option>---Pilih Karyawan---</option>');
-                $.each(res,function(id,nama){
-                    $("#id_user").append('<option value="'+id+'">'+nama+'</option>');
-                });
-            }
-        })
-    //End Get Karyawan
-
     // Store Data
         $('#saveBtn').click(function(){
             var url;
             var type;
-            var update = '{{ route("cuti.update",":id") }}'
-            if(idEdit == 0)
+            // var update = '{{ route("cuti.update",":id") }}'
+            if(idEdit === " ")
             {
-                url = "{{ route('cuti.store') }}"
+                // url = "{{ route('pengajuan.store') }}"
                 type = "POST"
             }else{
-                url = 'http://127.0.0.1:8000/cuti/update/'+idEdit
+                url = 'http://localhost:8000/persetujuan/accept/'+idEdit
                 type = "PUT"
             }
             $.ajax({
@@ -128,7 +165,7 @@
                         Swal.fire({
                             title : 'Berhasil !',
                             icon: 'success',
-                            text  : 'Data Master Cuti Berhasil Di Tambah',
+                            text  : 'Data Pengajuan Berhasil Di Tambah',
                             showConfirmButton : true
                         })
                     }else{
@@ -139,89 +176,15 @@
                             showConfirmButton : true
                         })
                     }
-                    idEdit = 0;
+                    idEdit = " ";
                     $('#frm_add').trigger("reset");
-                    $('#cutiModal').modal('hide');
+                    $('#persetujuanModal').modal('hide');
                     table.draw()
                 }
             })
         });
     // End Store Data
-
-    // EDIT DATA
-        $('body').on('click','.edit',function(){
-            var id = $(this).attr('data-id');
-            var url = '{{ route("cuti.edit",":id") }}'
-            url = url.replace(':id',id)
-
-            $.ajax({
-                type : 'GET',
-                url : url,
-                success:function(data){
-                    idEdit = data.id;
-                    var nama = data.nama
-                    $('#cutiModal').modal('show');
-                    $('#sisa_cuti').val(data.sisa_cuti);
-                    $('#tahun').val(data.tahun);
-                    $.each(res,function(id,nama){
-                        $("#id_user").append('<option value="'+id+'">'+nama+'</option>');
-                    });
-                    }
-            })
-        })
-    // END EDIT
-    // Delete Data
-        $('body').on('click','.delete',function(){
-            var id = $(this).attr('data-id');
-            var url = '{{ route("cuti.delete", ":id") }}';
-            url = url.replace(':id', id );
-            console.log(id)
-            Swal.fire({
-                title : 'Anda Yakin ?',
-                text  : 'Data Yang Sudah Dihapus Tidak Akan Bisa Dikembalikan',
-                icon  : 'warning',
-                showConfirmButton : true,
-                confirmButtonText: 'Ya, Hapus!',
-                cancelButtonText: 'Tidak, Batalkan!',
-                allowOutsideClick: false,
-            })
-            .then((result)=>{
-                if(result.value) {
-                    $.ajax({
-                        headers:{
-                            'X-CSRF-TOKEN' : '{{csrf_token()}}'
-                        },
-                        type : 'DELETE',
-                        url:url,
-                        success:function(response){
-                            if(response.fail != false)
-                            {
-                                Swal.fire({
-                                    title: 'Berhasil!',
-                                    icon : 'success',
-                                    text : 'Data Berhasil Di Hapus',
-                                    showConfirmButton :true
-                                })
-                            }else{
-                                Swal.fire({
-                                    title: 'Gagal!',
-                                    icon : 'error',
-                                    text : 'Data Gagal Di Hapus',
-                                    showConfirmButton :true
-                                })
-                            }
-                            table.draw()
-                        }
-                    })
-                }else{
-                    Swal.close()
-                }
-            })
-        })
-    // End Delete
-
-
-    })
+    });
 
 
 

@@ -20,6 +20,7 @@ class PengajuanCutiController extends Controller
         // $inv = $date1->diff($date2);
         // $days = $inv->format('%a');
         // dd($inv);
+
         return view('pengajuan_cuti.index');
     }
     public function data()
@@ -34,32 +35,71 @@ class PengajuanCutiController extends Controller
                     }
 
                 })
+                ->addColumn('status',function($pengajuan){
+                    if($pengajuan->status == '1')
+                    {
+                        $status = '<span class="badge badge-success"><i class="fa fa-check mr-5"></i>ACCEPTED !</span>';
+                        return $status;
+                    }else if($pengajuan->status == '0'){
+                        $status = '<span class="badge badge-danger"><i class="fa fa-times-circle mr-5"></i>Rejected</span>';
+                        return $status;
+                    }else{
+                        $status = '<span class="badge badge-primary"><i class="fa fa-spinner mr-5"></i>WAITING !</span>';
+                        return $status;
+                    }
+
+
+                })
                 ->addColumn('action',function($row){
                     $aksi = '
-                    <a href = "javascript:void(0)" data-id="'.$row->number.'" id="edit" class = " edit btn btn-sm btn-outline-warning mb-10">Edit</a>
-                    <a href = "javascript:void(0)" data-id="'.$row->number.'" id="delete" class = " delete btn btn-sm btn-outline-danger">Delete</a>
+                    <a href = "javascript:void(0)" data-id="'.$row->number.'" id="edit" class = " edit btn btn-sm btn-flat btn-outline-warning">Edit</a>
+                    <a href = "javascript:void(0)" data-id="'.$row->number.'" id="delete" class = " delete btn btn-sm btn-flat btn-outline-danger">Delete</a>
                     ';
                     return $aksi;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action','status'])
                 ->make(true);
     }
+
+    public function getCuti()
+    {
+        $cuti = Cuti::where('id_user',Auth::user()->id)->first();
+        $data = $cuti->sisa_cuti;
+
+        return response()->json($data);
+    }
+
+    public function getStatus()
+    {
+        $status = Pengajuan::latest('tgl_input')->first();
+        return response()->json($status);
+    }
+
+    public static function generateNumber()
+    {
+
+        $number = Pengajuan::select('number')
+                    ->orderBy('tgl_input','desc')
+                    ->count();
+        $no = 'PC201900000';
+        $prefix = substr($no,0,6);
+        // $postfix = substr($no,-5);
+        $number = $prefix.str_pad($number + 1,5,0,STR_PAD_LEFT);
+        return $number;
+
+    }
+
 
     public function store(Request $request)
     {
         $pengajuan = new Pengajuan;
-        $pengajuan->number = rand();
+        $pengajuan->number = $this->generateNumber();
         $pengajuan->tgl_awal = $request->tgl_awal;
         $pengajuan->tgl_akhir = $request->tgl_akhir;
         $pengajuan->user_input = Auth::user()->id;
         $pengajuan->keterangan = $request->keterangan;
         $pengajuan->jumlah_cuti = $request->jumlah_cuti;
         $pengajuan->save();
-
-        $cuti = Cuti::where('id_user',Auth::user()->id)->first();
-        // dd($cuti);
-        $cuti->sisa_cuti = $cuti->sisa_cuti - $request->jumlah_cuti;
-        $cuti->save();
 
         return response()->json([
 
@@ -75,7 +115,7 @@ class PengajuanCutiController extends Controller
     public function update(Request $request,$id)
     {
         $pengajuan = Pengajuan::find($id);
-        $pengajuan->number = rand();
+        // $pengajuan->number = $this->generateNumber();
         $pengajuan->tgl_awal = $request->tgl_awal;
         $pengajuan->tgl_akhir = $request->tgl_akhir;
         $pengajuan->user_input = Auth::user()->id;

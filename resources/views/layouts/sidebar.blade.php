@@ -96,7 +96,7 @@
                             <a class="" data-toggle="" href="{{route('cuti.index')}}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Data Master Cuti</span></a>
                         </li>
                         <li class="">
-                            <a class="" data-toggle="" href=""><i class="si si-cup"></i><span class="sidebar-mini-hide">Pengajuan Cuti</span></a>
+                            <a class="" data-toggle="" href="{{route('persetujuan.index')}}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Persetujuan Cuti</span></a>
                         </li>
                     </ul>
                 </div>

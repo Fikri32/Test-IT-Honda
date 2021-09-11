@@ -35,8 +35,19 @@ Route::group(['prefix' => 'cuti'],function(){
 Route::group(['prefix' => 'pengajuan'],function(){
     Route::get('/','PengajuanCutiController@index')->name('pengajuan.index');
     Route::get('/data','PengajuanCutiController@data')->name('pengajuan.data');
+    Route::get('/getCuti','PengajuanCutiController@getCuti')->name('pengajuan.cuti');
+    Route::get('/getstatus','PengajuanCutiController@getStatus')->name('pengajuan.status');
     Route::post('/store','PengajuanCutiController@store')->name('pengajuan.store');
     Route::get('/edit/{id}','PengajuanCutiController@edit')->name('pengajuan.edit');
     Route::put('/update/{id}','PengajuanCutiController@update')->name('pengajuan.update');
     Route::delete('/delete/{number}','PengajuanCutiController@delete')->name('pengajuan.delete');
 });
+
+Route::group(['prefix' => 'persetujuan'],function(){
+    Route::get('/','PersetujuanCutiController@index')->name('persetujuan.index');
+    Route::get('/data','PersetujuanCutiController@data')->name('persetujuan.data');
+    Route::get('/detail/{id}','PersetujuanCutiController@detail')->name('persetujuan.detail');
+    Route::put('/accept/{id}','PersetujuanCutiController@accept')->name('persetujuan.accept');
+});
+
+Route::get('/number','PengajuanCutiController@generateNumber');

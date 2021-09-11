@@ -11,27 +11,25 @@
         </div>
     </div>
     <div class="block-content">
-        <a class="btn btn-primary m-3" id="tambah" name="tambah" href="javascript:;" data-toggle="modal" data-target="#pengajuanModal">
-            Add Pengajuan Cuti
-        </a>
         <table class="table table-bordered table-vcenter no-footer" id="pengajuan">
+            <button class="btn btn-primary btn-sm btn-flat pull-left" id="tambah"><i class="fa fa-plus"></i>Tambah</button>
         <thead>
             <tr>
                 <th>Nomor</th>
-                <th>Tanggal Awal</th>
-                <th>Tanggal Akhir</th>
-                <th>Cuti</th>
+                <th>Awal</th>
+                <th>Akhir</th>
+                <th>Cuti(Hari)</th>
                 <th>Keterangan</th>
                 <th>Status</th>
                 <th>Acc By</th>
-                <th>Keterangan Acc</th>
+                <th>Ket</th>
                 <th>Action</th>
             </tr>
         </thead>
     </table>
     </div>
 </div>
-<div id="pengajuanModal" class="modal fade" role="dialog">
+<div class="modal fade" id="pengajuanModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -54,9 +52,9 @@
                     <div class="row">
                         <div class="col-4">
                             <div class="form-group">
-                                <label for="">Sisa Cuti : 12</label>
+                                <label id="sisa_cuti" for=""></label>
                                 <label for="">Jumah Cuti</label>
-                                <input type="text" class="form-control" id="jumlah_cuti" name="jumlah_cuti">
+                                <input type="text" class="form-control" id="jumlah_cuti" name="jumlah_cuti" readonly>
                             </div>
                         </div>
                         <div class="col-8">
@@ -82,21 +80,32 @@
         var idEdit = " ";
         console.log (idEdit)
 
+
+    // Tanggal
         $('#tgl_awal').datepicker({
             format : 'yyyy/mm/dd'
         });
 
-         $('#tgl_akhir').datepicker({
+        $('#tgl_akhir').datepicker({
             format : 'yyyy/mm/dd'
         });
 
-        $('#tambah').click(function () {
+        $('#tgl_akhir').change(function(){
+            var start = new Date($('#tgl_awal').val())
+            var end = new Date($('#tgl_akhir').val())
+            start = start.setHours(0,0,0,0);
+            end = end.setHours(end.getHours()+24);
 
-            $('#frm_add').trigger("reset");
+            var diff = new Date(end - start)
 
-            $('#pengajuanModal').modal('show');
+            var days = diff/1000/60/60/24
+            $('#jumlah_cuti').val(days)
+        })
+    //End Tanggal
 
-        });
+
+
+
 
     // Data
         var table = $('#pengajuan').DataTable({
@@ -117,6 +126,44 @@
         });
     // End Data
 
+    // Get Karyawan
+        $.ajax({
+            url:"{{ route('pengajuan.cuti') }}",
+            type:'GET',
+            success:function(data){
+                $("#sisa_cuti").html("Sisa Cuti :" + data);
+            }
+        })
+    //End Get Karyawan
+
+    //Get Status
+        $('#tambah').click(function () {
+            $.ajax({
+                url:"{{ route('pengajuan.status') }}",
+                type:'GET',
+                success:function(status){
+                    console.log(status)
+                    if(status.length != null && status.status == null || status.length == null && status.status == null )
+                    {
+
+                        Swal.fire({
+                        title : 'Tidak Bisa Menambah Pengajuan Baru',
+                        icon  : 'error',
+                        text  : 'Mohon Tunggu Konfirmasi Status Pengajuan Sebelumnya',
+                        showConfirmButton : true,
+                        allowOutsideClick : false
+                        })
+
+                    }else{
+                        $('#pengajuanModal').modal('show');
+                        $('#frm_add').trigger("reset");
+                    }
+
+                },
+            })
+        });
+    // EndStatus
+
     // Store Data
         $('#saveBtn').click(function(){
             var url;
@@ -127,7 +174,10 @@
                 url = "{{ route('pengajuan.store') }}"
                 type = "POST"
             }else{
-                url = 'http://localhost:8000/pengajuan/update/'+idEdit
+
+                url = '{{ route("pengajuan.update", ":id") }}';
+                url = url.replace(':id', idEdit );
+                // url = 'http://localhost:8000/pengajuan/update/'+idEdit
                 type = "PUT"
             }
             $.ajax({
