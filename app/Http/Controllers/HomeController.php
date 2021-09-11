@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
+use App\Models\User;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('dashboard');
+        if(Auth::user()->hasRole('hrd'))
+        {
+            $notification = Auth::user()->unreadNotifications;
+            return view('dashboard',compact('notification'));
+        }else{
+            $notification = Auth::user()->unreadNotifications;
+            return view('dashboard',compact('notification'));
+        }
+
+
+        // dd($name);
+
     }
 }

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\NewPengajuanNotification;
+use App\Notifications\NewPersetujuanNotification;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Role;
 

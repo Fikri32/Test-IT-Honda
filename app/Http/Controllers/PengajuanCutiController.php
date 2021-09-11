@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\NewPengajuanNotification;
 use Illuminate\Http\Request;
 use App\Models\Pengajuan;
 use App\Models\User;
@@ -9,6 +10,8 @@ use App\Models\Cuti;
 use Auth;
 use Datatables;
 use Datetime;
+use Notification;
+use DB;
 
 class PengajuanCutiController extends Controller
 {
@@ -73,6 +76,10 @@ class PengajuanCutiController extends Controller
     {
         $status = Pengajuan::latest('tgl_input')->first();
         return response()->json($status);
+
+
+
+
     }
 
     public static function generateNumber()
@@ -100,6 +107,19 @@ class PengajuanCutiController extends Controller
         $pengajuan->keterangan = $request->keterangan;
         $pengajuan->jumlah_cuti = $request->jumlah_cuti;
         $pengajuan->save();
+
+        $user = new User;
+        $user->name = User::select('name')
+                    ->where('id','=',Auth::user()->id)
+                    ->pluck('name')
+                    ->first();
+
+
+        $admin = User::whereHas('roles', function($q){
+                    $q->where('name', 'HRD');
+        })->get();
+        Notification::send($admin,new NewPengajuanNotification($pengajuan,$user));
+        // dd($pengajuan->user);
 
         return response()->json([
 

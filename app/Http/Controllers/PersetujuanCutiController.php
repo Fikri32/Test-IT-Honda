@@ -9,6 +9,8 @@ use App\Models\Pengajuan;
 use Carbon\Carbon;
 use Auth;
 use Datatables;
+use Notification;
+use App\Notifications\NewPersetujuanNotification;
 
 class PersetujuanCutiController extends Controller
 {
@@ -66,6 +68,18 @@ class PersetujuanCutiController extends Controller
 
             $cuti->save();
         }
+
+        $user = new User;
+        $user->name = User::select('name')
+                    ->where('id','=',Auth::user()->id)
+                    ->pluck('name')
+                    ->first();
+
+
+        $karyawan = User::whereHas('roles', function($q){
+                    $q->where('name', 'karyawan');
+        })->get();
+        Notification::send($karyawan,new NewPersetujuanNotification($persetujuan,$user));
 
         return response()->json([
 
