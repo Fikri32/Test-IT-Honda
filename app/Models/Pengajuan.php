@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\NewPengajuanNotification;
 use App\Notifications\NewPersetujuanNotification;
-
 use Notification;
+
 class Pengajuan extends Model
 {
     use Notifiable;
@@ -18,14 +18,19 @@ class Pengajuan extends Model
         'user_acc','status','jumlah_cuti','keterangan','keterangan_acc',
 
     ];
-    public $timestamps = false;
+    // public $timestamps = false;
     protected $keyType = 'string';
     protected $primaryKey = 'number';
-    const CREATED_AT = 'tgl_input';
+    const UPDATED_AT = null;
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_acc');
+    }
+
+     public function pengaju()
+    {
+        return $this->belongsTo(User::class, 'user_input');
     }
 
 

@@ -26,10 +26,7 @@ class PersetujuanCutiController extends Controller
         return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('user_input',function($data){
-                    if($data->user != null)
-                    {
-                        return $data->user->name;
-                    }
+                    return $data->pengaju->name;
                 })
                 ->addColumn('action',function($row){
                     $aksi = '
@@ -43,6 +40,8 @@ class PersetujuanCutiController extends Controller
     public function detail($id)
     {
         $data = Pengajuan::find($id);
+        // $karyawan = User::where('id','=',$data->user_input)->get();
+        // dd($karyawan);
         return $data;
     }
     public function accept(Request $request,$id)
@@ -53,6 +52,16 @@ class PersetujuanCutiController extends Controller
         $persetujuan->user_acc = Auth::user()->id;
         $persetujuan->tgl_acc = Carbon::now();
         $persetujuan->update();
+
+        $user = new User;
+        $user->name = User::select('name')
+                    ->where('id','=',Auth::user()->id)
+                    ->pluck('name')
+                    ->first();
+
+
+        $karyawan = User::where('id',$persetujuan->user_input)->get();
+        Notification::send($karyawan,new NewPersetujuanNotification($persetujuan,$user));
 
         if($persetujuan and $persetujuan->status == 1)
         {
@@ -69,17 +78,7 @@ class PersetujuanCutiController extends Controller
             $cuti->save();
         }
 
-        $user = new User;
-        $user->name = User::select('name')
-                    ->where('id','=',Auth::user()->id)
-                    ->pluck('name')
-                    ->first();
 
-
-        $karyawan = User::whereHas('roles', function($q){
-                    $q->where('name', 'karyawan');
-        })->get();
-        Notification::send($karyawan,new NewPersetujuanNotification($persetujuan,$user));
 
         return response()->json([
 

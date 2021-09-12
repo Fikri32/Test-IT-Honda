@@ -15,6 +15,7 @@
         <thead>
             <tr>
                 <th>Nomor</th>
+                <th>Nama</th>
                 <th>Tanggal Awal</th>
                 <th>Tanggal Akhir</th>
                 <th>Cuti(Hari)</th>
@@ -130,6 +131,7 @@
                 ajax: "{{ route('persetujuan.data') }}",
                 columns: [
                     { data: 'number', name: 'number' },
+                    { data: 'user_input', name: 'user_input' },
                     { data: 'tgl_awal', name: 'tgl_awal' },
                     { data: 'tgl_akhir', name: 'tgl_akhiri' },
                     { data: 'jumlah_cuti', name: 'jumlah_cuti'},
@@ -143,13 +145,12 @@
         $('#saveBtn').click(function(){
             var url;
             var type;
-            // var update = '{{ route("cuti.update",":id") }}'
             if(idEdit === " ")
             {
-                // url = "{{ route('pengajuan.store') }}"
-                type = "POST"
+
             }else{
-                url = 'http://localhost:8000/persetujuan/accept/'+idEdit
+                url = '{{ route("persetujuan.accept", ":id") }}';
+                url = url.replace(':id', idEdit );
                 type = "PUT"
             }
             $.ajax({

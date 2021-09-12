@@ -28,7 +28,7 @@ class PengajuanCutiController extends Controller
     }
     public function data()
     {
-        $pengajuan = Pengajuan::all();
+        $pengajuan = Pengajuan::where('user_input','=',Auth::user()->id)->get();
         return Datatables::of($pengajuan)
                 ->addIndexColumn()
                 ->addColumn('user_acc',function($pengajuan){
@@ -74,11 +74,8 @@ class PengajuanCutiController extends Controller
 
     public function getStatus()
     {
-        $status = Pengajuan::latest('tgl_input')->first();
+        $status = Pengajuan::where('user_input',Auth::user()->id)->latest('tgl_input')->first();
         return response()->json($status);
-
-
-
 
     }
 
@@ -143,10 +140,6 @@ class PengajuanCutiController extends Controller
         $pengajuan->jumlah_cuti = $request->jumlah_cuti;
         $pengajuan->save();
 
-        $cuti = Cuti::where('id_user',Auth::user()->id)->first();
-        // dd($cuti);
-        $cuti->sisa_cuti = $cuti->sisa_cuti - $request->jumlah_cuti;
-        $cuti->save();
         return response()->json([
 
         ],200);

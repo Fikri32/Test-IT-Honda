@@ -14,12 +14,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/mark', 'HomeController@markNotification')->name('mark.home');
 
 Route::group(['prefix' => 'cuti'],function(){
     Route::get('','CutiController@index')->name('cuti.index');

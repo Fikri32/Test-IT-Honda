@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\User;
+use notifications;
 
 class HomeController extends Controller
 {
@@ -30,12 +31,20 @@ class HomeController extends Controller
             $notification = Auth::user()->unreadNotifications;
             return view('dashboard',compact('notification'));
         }else{
-            $notification = Auth::user()->unreadNotifications;
-            return view('dashboard',compact('notification'));
-        }
+            $data = Auth::user()->unreadNotifications;
+            // dd($data);
+            return view('dashboard',compact('data'));
+            }
 
-
-        // dd($name);
-
+    }
+    public function markNotification(Request $request)
+    {
+        auth()->user()
+            ->unreadnotifications
+            ->when($request->input('id'),function($query) use ($request){
+                return $query->where('id',$request->input('id'));
+            })
+            ->markAsRead();
+        return response()->noContent();
     }
 }

@@ -141,9 +141,9 @@
             $.ajax({
                 url:"{{ route('pengajuan.status') }}",
                 type:'GET',
-                success:function(status){
-                    console.log(status)
-                    if(status.length != null && status.status == null || status.length == null && status.status == null )
+                success:function(response){
+                    console.log(response.status == null)
+                    if(Object.keys(response).length != 0 && response.status == null)
                     {
 
                         Swal.fire({
@@ -154,7 +154,8 @@
                         allowOutsideClick : false
                         })
 
-                    }else{
+                    }else
+                    {
                         $('#pengajuanModal').modal('show');
                         $('#frm_add').trigger("reset");
                     }

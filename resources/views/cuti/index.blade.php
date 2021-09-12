@@ -16,7 +16,7 @@
         </a>
         <table class="table table-bordered" id="cuti">
         <thead>
-            <tr>
+            <tr >
                 <th>id</th>
                 <th>Nama</th>
                 <th>Sisa Cuti</th>
@@ -112,7 +112,8 @@
                 url = "{{ route('cuti.store') }}"
                 type = "POST"
             }else{
-                url = 'http://127.0.0.1:8000/cuti/update/'+idEdit
+                url = '{{ route("cuti.update", ":id") }}';
+                url = url.replace(':id', idEdit );
                 type = "PUT"
             }
             $.ajax({
@@ -164,7 +165,7 @@
                     $('#sisa_cuti').val(data.sisa_cuti);
                     $('#tahun').val(data.tahun);
                     $.each(res,function(id,nama){
-                        $("#id_user").append('<option value="'+id+'">'+nama+'</option>');
+                        $("#id_user").append('<option value="'+id+'">Default=='+nama+'</option>');
                     });
                     }
             })

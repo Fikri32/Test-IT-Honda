@@ -55,4 +55,9 @@ class User extends Authenticatable
         return $this->hasOne(Pengajuan::class, 'id');
     }
 
+     public function persetujuan()
+    {
+        return $this->hasOne(Pengajuan::class, 'id');
+    }
+
 }

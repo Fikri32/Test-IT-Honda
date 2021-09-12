@@ -48,23 +48,12 @@
 
                     <!-- Visible only in normal mode -->
                     <div class="sidebar-mini-hidden-b text-center">
-                        <a class="img-link" href="be_pages_generic_profile.html">
+                        <a class="img-link" href="">
                             <img class="img-avatar" src="assets/img/avatars/avatar15.jpg" alt="">
                         </a>
                         <ul class="list-inline mt-10">
                             <li class="list-inline-item">
-                                <a class="link-effect text-dual-primary-dark font-size-xs font-w600 text-uppercase" href="be_pages_generic_profile.html">J. Smith</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
-                                <a class="link-effect text-dual-primary-dark" data-toggle="layout" data-action="sidebar_style_inverse_toggle" href="javascript:void(0)">
-                                    <i class="si si-drop"></i>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a class="link-effect text-dual-primary-dark" href="op_auth_signin.html">
-                                    <i class="si si-logout"></i>
-                                </a>
+                                <a class="link-effect text-dual-primary-dark font-size-xs font-w600 text-uppercase" href="">{{Auth::user()->name}}</a>
                             </li>
                         </ul>
                     </div>
@@ -77,10 +66,10 @@
                 <div class="content-side content-side-full">
                     <ul class="nav-main">
                         <li>
-                            <a class="" href="#"><i class="si si-home"></i><span class="sidebar-mini-hide">Dashboards</span></a>
+                            <a class="" href="{{route('home')}}"><i class="fa fa-home"></i><span class="sidebar-mini-hide">Dashboards</span></a>
                         </li>
                         <li class="">
-                            <a class="" data-toggle="" href="{{route('pengajuan.index')}}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Pengajuan Cuti</span></a>
+                            <a class="" data-toggle="" href="{{route('pengajuan.index')}}"><i class="fa fa-send-o"></i><span class="sidebar-mini-hide">Pengajuan Cuti</span></a>
                         </li>
 
                     </ul>
@@ -90,13 +79,13 @@
                 <div class="content-side content-side-full">
                     <ul class="nav-main">
                         <li>
-                            <a class="" href="#"><i class="si si-home"></i><span class="sidebar-mini-hide">Dashboards</span></a>
+                            <a class="" href="{{route('home')}}"><i class="fa fa-home"></i><span class="sidebar-mini-hide">Dashboards</span></a>
                         </li>
                         <li class="">
-                            <a class="" data-toggle="" href="{{route('cuti.index')}}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Data Master Cuti</span></a>
+                            <a class="" data-toggle="" href="{{route('cuti.index')}}"><i class="fa fa-group"></i><span class="sidebar-mini-hide">Data Master Cuti</span></a>
                         </li>
                         <li class="">
-                            <a class="" data-toggle="" href="{{route('persetujuan.index')}}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Persetujuan Cuti</span></a>
+                            <a class="" data-toggle="" href="{{route('persetujuan.index')}}"><i class="fa fa-envelope-open"></i><span class="sidebar-mini-hide">Persetujuan Cuti</span></a>
                         </li>
                     </ul>
                 </div>

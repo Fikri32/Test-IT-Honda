@@ -27,6 +27,7 @@ class CreatePengajuansTable extends Migration
             $table->string('keterangan_acc')->nullable();
             $table->foreign('user_input')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('user_acc')->references('id')->on('users')->onDelete('cascade');
+            $table->timestamps();
             $table->dropColumn('updated_at');
         });
     }
@@ -39,5 +40,6 @@ class CreatePengajuansTable extends Migration
     public function down()
     {
         Schema::dropIfExists('pengajuans');
+        $table->dropColumn('updated_at');
     }
 }

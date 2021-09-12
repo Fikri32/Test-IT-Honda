@@ -12,7 +12,8 @@ use App\Models\User;
 class NewPersetujuanNotification extends Notification
 {
     use Queueable;
-
+    protected $persetujuan;
+    protected $user;
     /**
      * Create a new notification instance.
      *
@@ -35,16 +36,11 @@ class NewPersetujuanNotification extends Notification
         return ['database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
     public function toDatabase($notifiable)
     {
-          return [
+        return [
             'user' => $this->persetujuan->user_acc,
+            'user_input' => $this->persetujuan->user_input,
             'name' => $this->user->name
         ];
     }
