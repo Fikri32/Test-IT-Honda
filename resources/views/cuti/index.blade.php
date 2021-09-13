@@ -66,21 +66,21 @@
         var idEdit = 0;
 
         $('#tambah').click(function () {
-            $.ajax({
+            $('#frm_add').trigger("reset");
+            $('#cutiModal').modal('show');
+                $.ajax({
                 url:"{{ route('cuti.karyawan') }}",
                 type:'GET',
                 success:function(res){
-                    idEdit = 0
                     $("#id_user").empty();
                     $("#id_user").append('<option>---Pilih Karyawan---</option>');
                     $.each(res,function(id,nama){
                         $("#id_user").append('<option value="'+id+'">'+nama+'</option>');
                     });
-                    $('#frm_add').trigger("reset");
-                    $('#cutiModal').modal('show');
                 }
             })
         });
+
 
     // Data
         var table = $('#cuti').DataTable({
@@ -178,7 +178,6 @@
                     $.each(data.karyawan,function(id,nama){
                                 $("#id_user").append('<option value="'+id+'">'+nama+'</option>');
                     })
-                    $('#frm_add').trigger("reset");
 
                     }
             })
