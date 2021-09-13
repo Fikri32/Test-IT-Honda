@@ -51,8 +51,16 @@ class CutiController extends Controller
     public function edit($id)
     {
         $data = Cuti::find($id);
+
+        $default = $data->user;
+        //  dd($default->id);
         $karyawan = User::role('karyawan')->pluck('name','id');
-        return $data;
+        $new = [
+            'data'=>$data,
+            'karyawan' => $karyawan,
+            'default' => $default
+        ];
+        return $new;
     }
 
     public function update(Request $request,$id)

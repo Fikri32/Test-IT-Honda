@@ -19,8 +19,8 @@
                 <th>Tanggal Awal</th>
                 <th>Tanggal Akhir</th>
                 <th>Cuti(Hari)</th>
+                <th>Keterangan</th>
                 <th>Status</th>
-                <th>Action</th>
             </tr>
         </thead>
     </table>
@@ -105,90 +105,24 @@
     $(document).ready(function(){
         var idEdit = 0;
 
-         $('body').on('click','.detail',function(){
-            var id = $(this).attr('data-id');
-            var url = '{{ route("persetujuan.detail",":id") }}'
-            url = url.replace(':id',id)
-
-            $.ajax({
-                type : 'GET',
-                url : url,
-                success:function(data){
-                    idEdit = data.number;
-                    $('#persetujuanModal').modal('show');
-                    $('#tgl_awal').val(data.tgl_awal);
-                    $('#tgl_akhir').val(data.tgl_akhir);
-                    $('#keterangan').val(data.keterangan);
-                    $('#jumlah_cuti').val(data.jumlah_cuti);
-                    }
-            })
-        })
-
     // Data
         var table = $('#persetujuan').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('persetujuan.data') }}",
+                ajax: "{{ route('persetujuan.listdata') }}",
                 columns: [
                     { data: 'number', name: 'number' },
                     { data: 'user_input', name: 'user_input' },
                     { data: 'tgl_awal', name: 'tgl_awal' },
                     { data: 'tgl_akhir', name: 'tgl_akhiri' },
                     { data: 'jumlah_cuti', name: 'jumlah_cuti'},
+                    { data: 'keterangan', name: 'keterangan' },
                     { data: 'status', name: 'status' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false}
+
                 ]
         });
     // End Data
-
-    // Store Data
-        $('#saveBtn').click(function(){
-            var url;
-            var type;
-            if(idEdit === " ")
-            {
-
-            }else{
-                url = '{{ route("persetujuan.accept", ":id") }}';
-                url = url.replace(':id', idEdit );
-                type = "PUT"
-            }
-            $.ajax({
-                headers : {
-                    'X-CSRF-TOKEN' : "{{csrf_token()}}"
-                },
-                type : type,
-                url : url,
-                data : $('#frm_add').serialize(),
-                success : function(response){
-                    if(response.fail != false)
-                    {
-                        Swal.fire({
-                            title : 'Berhasil !',
-                            icon: 'success',
-                            text  : 'Data Pengajuan Berhasil Di Tambah',
-                            showConfirmButton : true
-                        })
-                    }else{
-                        Swal.fire({
-                            title : 'Gagal !',
-                            text  : 'Periksa Kembali Form Input',
-                            icon  : 'error',
-                            showConfirmButton : true
-                        })
-                    }
-                    idEdit = " ";
-                    $('#frm_add').trigger("reset");
-                    $('#persetujuanModal').modal('hide');
-                    table.draw()
-                }
-            })
-        });
-    // End Store Data
     });
-
-
-
 
 
 </script>

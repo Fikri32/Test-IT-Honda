@@ -54,11 +54,21 @@ class PengajuanCutiController extends Controller
 
                 })
                 ->addColumn('action',function($row){
-                    $aksi = '
-                    <a href = "javascript:void(0)" data-id="'.$row->number.'" id="edit" class = " edit btn btn-sm btn-flat btn-outline-warning">Edit</a>
-                    <a href = "javascript:void(0)" data-id="'.$row->number.'" id="delete" class = " delete btn btn-sm btn-flat btn-outline-danger">Delete</a>
-                    ';
-                    return $aksi;
+                    if($row->status == null)
+                    {
+                        $aksi = '
+                        <a href = "javascript:void(0)" data-id="'.$row->number.'" id="edit" class = " edit btn btn-sm btn-flat btn-outline-warning">Edit</a>
+                        <a href = "javascript:void(0)" data-id="'.$row->number.'" id="delete" class = " delete btn btn-sm btn-flat btn-outline-danger">Delete</a>
+                        ';
+                        return $aksi;
+                    }else{
+                        $aksi = '
+
+                        <a href = "javascript:void(0)" data-id="'.$row->number.'" id="delete" class = " delete btn btn-sm btn-flat btn-outline-danger">Delete</a>
+                        ';
+                        return $aksi;
+                    }
+
                 })
                 ->rawColumns(['action','status'])
                 ->make(true);
@@ -82,14 +92,31 @@ class PengajuanCutiController extends Controller
     public static function generateNumber()
     {
 
-        $number = Pengajuan::select('number')
-                    ->orderBy('tgl_input','desc')
-                    ->count();
-        $no = 'PC201900000';
-        $prefix = substr($no,0,6);
-        // $postfix = substr($no,-5);
-        $number = $prefix.str_pad($number + 1,5,0,STR_PAD_LEFT);
-        return $number;
+        // $number = Pengajuan::select('number')
+        //             ->orderBy('tgl_input','desc')
+        //             ->first();
+        // $no = 'PC201900000';
+        // $prefix = substr($no,0,6);
+        // $angka = last(explode(" ",$no));
+        // $number = $prefix.str_pad(intval($angka) + 1,5,0,STR_PAD_LEFT);
+        // dd($number);
+        // if($number == $number)
+        // {
+        //     $number = $prefix.str_pad($number + 2,5,0,STR_PAD_LEFT);
+        // }
+
+        // dd($new);
+        $data = Pengajuan::select('number')
+                        ->orderBy('created_at','desc')
+                        ->pluck('number')
+                        ->first();
+        // dd($data);
+        $number = substr($data,6,11);
+        $new = str_pad(intval($number) + 1, 5, 0, STR_PAD_LEFT); //increment the number by 1 and pad with 0 in left.
+
+        $data = 'PC2109'.$new;
+        // dd($data);
+        return $data;
 
     }
 

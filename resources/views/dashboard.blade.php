@@ -11,40 +11,36 @@
     </div>
     <div class="block-content">
         @role('hrd')
-            @foreach ($notification as $item)
-            <div class=" alert js-animation-object animated lightSpeedIn">
-                <div class="col-md-12">
-                    <!-- Success Alert -->
-                    <div class="alert alert-primary alert-dismissable" data-animation-class="lightSpeedIn" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                        <h3 class="alert-heading font-size-h4 font-w400">Pengajuan Cuti Baru Dari {{$item->data['name']}} </h3>
-                        <p class="mb-0"><a class="alert-link link-effect mark-as-read" data-id="{{$item->id}}" href="#" >Baca Dan Tandai!</a>!</p>
-                    </div>
-                    <!-- END Success Alert -->
+            @forelse($notification as $item)
+                <div class="alert alert-primary js-animation-object animated lightSpeedIn" role="alert">
+                    <h3 class="alert-heading font-size-h4 font-w400">[{{$item->created_at}}] Pengajuan Cuti Baru Dari {{$item->data['name']}} </h3>
                 </div>
-            </div>
-            @endforeach
+                @if($loop->last)
+                    <a href="#" class="btn btn-primary btn-sm btn-flat link-effect mb-3" id="mark-all">
+                        Baca Dan Tandai Semua Pesan
+                    </a>
+                @endif
+
+            @empty
+                There are no new notifications
+            @endforelse
         @endrole
         @role('karyawan')
+            @forelse($notification as $item)
+                <div class="alert alert-primary js-animation-object animated lightSpeedIn" role="alert">
+                    <h3 class="alert-heading font-size-h4 font-w400">[{{$item->created_at}}] Status Pengajuan Telah Di Update Oleh {{$item->data['name']}} </h3>
+                    <p class="mb-0"><a class="alert-link link-effect mark-as-read" data-id="{{$item->id}}" href="#" >Tandai Sudah Dibaca </a>!</p>
 
-           @foreach ($data as $item)
-            <div class="js-animation-object animated lightSpeedIn">
-                <div class="col-md-12">
-                    <!-- Success Alert -->
-                    <div class="alert alert-success alert-dismissable" data-animation-class="lightSpeedIn" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                        <h3 class="alert-heading font-size-h4 font-w400">Validasi Pengajuan Cuti Oleh {{$item->data['name']}} </h3>
-                        <p class="mb-0"><a class="alert-link link-effect mark-as-read" data-id="{{$item->id}}" href="#" >Baca Dan Tandai!</a>!</p>
-                    </div>
-                    <!-- END Success Alert -->
                 </div>
-            </div>
-            @endforeach
+                @if($loop->last)
+                    <a href="#" class="btn btn-primary btn-sm btn-flat link-effect mb-3" id="mark-all">
+                        Baca Dan Tandai Semua Pesan
+                    </a>
+                @endif
 
+                @empty
+                There are no new notifications
+            @endforelse
         @endrole
     </div>
 </div>
@@ -68,16 +64,16 @@
         $('.mark-as-read').click(function() {
             let request = sendMarkRequest($(this).data('id'));
             request.done(() => {
-                 $(this).parents('div.alert').remove();
-                 window.location = "{{ route('persetujuan.index') }}"
+                $(this).parents('div.alert').remove();
             });
         });
-        // $('#mark-all').click(function() {
-        //     let request = sendMarkRequest();
-        //     request.done(() => {
-
-        //     })
-        // });
+        $('#mark-all').click(function() {
+            let request = sendMarkRequest();
+            request.done(() => {
+                $('div.alert').remove();
+                window.location = "{{ route('persetujuan.index') }}"
+            })
+        });
     });
     })
 </script>
@@ -85,9 +81,9 @@
 @role('karyawan')
     <script>
     $('document').ready(function(){
-         function sendMarkRequest(id = null) {
+        function sendMarkRequest(id = null) {
         return $.ajax("{{ route('mark.home') }}", {
-              headers : {
+            headers : {
                     'X-CSRF-TOKEN' : "{{csrf_token()}}"
                 },
             method: 'POST',
@@ -100,16 +96,17 @@
         $('.mark-as-read').click(function() {
             let request = sendMarkRequest($(this).data('id'));
             request.done(() => {
-                 $(this).parents('div.alert').remove();
-                 window.location = "{{ route('pengajuan.index') }}"
+                $(this).parents('div.alert').remove();
+                window.location = "{{ route('pengajuan.index') }}"
             });
         });
-        // $('#mark-all').click(function() {
-        //     let request = sendMarkRequest();
-        //     request.done(() => {
-
-        //     })
-        // });
+        $('#mark-all').click(function() {
+            let request = sendMarkRequest();
+            request.done(() => {
+                $('div.alert').remove();
+                window.location = "{{ route('pengajuan.index') }}"
+            })
+        });
     });
     })
 </script>

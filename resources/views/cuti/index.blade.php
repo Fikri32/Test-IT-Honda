@@ -66,11 +66,20 @@
         var idEdit = 0;
 
         $('#tambah').click(function () {
-
-            $('#frm_add').trigger("reset");
-
-            $('#cutiModal').modal('show');
-
+            $.ajax({
+                url:"{{ route('cuti.karyawan') }}",
+                type:'GET',
+                success:function(res){
+                    idEdit = 0
+                    $("#id_user").empty();
+                    $("#id_user").append('<option>---Pilih Karyawan---</option>');
+                    $.each(res,function(id,nama){
+                        $("#id_user").append('<option value="'+id+'">'+nama+'</option>');
+                    });
+                    $('#frm_add').trigger("reset");
+                    $('#cutiModal').modal('show');
+                }
+            })
         });
 
     // Data
@@ -106,7 +115,6 @@
         $('#saveBtn').click(function(){
             var url;
             var type;
-            var update = '{{ route("cuti.update",":id") }}'
             if(idEdit == 0)
             {
                 url = "{{ route('cuti.store') }}"
@@ -159,14 +167,19 @@
                 type : 'GET',
                 url : url,
                 success:function(data){
-                    idEdit = data.id;
-                    var nama = data.nama
+                    idEdit = data.data.id;
+                    // console.log(data.karyawan.nama)
+                    $('#frm_add').trigger("reset");
                     $('#cutiModal').modal('show');
-                    $('#sisa_cuti').val(data.sisa_cuti);
-                    $('#tahun').val(data.tahun);
-                    $.each(res,function(id,nama){
-                        $("#id_user").append('<option value="'+id+'">Default=='+nama+'</option>');
-                    });
+                    $('#sisa_cuti').val(data.data.sisa_cuti);
+                    $('#tahun').val(data.data.tahun);
+                    $("#id_user").empty()
+                    $("#id_user").append('<option value="'+data.default.id+'">Default=='+data.default.name+'</option>');
+                    $.each(data.karyawan,function(id,nama){
+                                $("#id_user").append('<option value="'+id+'">'+nama+'</option>');
+                    })
+                    $('#frm_add').trigger("reset");
+
                     }
             })
         })

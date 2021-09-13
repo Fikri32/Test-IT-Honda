@@ -38,6 +38,7 @@ Route::group(['prefix' => 'pengajuan'],function(){
     Route::get('/data','PengajuanCutiController@data')->name('pengajuan.data');
     Route::get('/getCuti','PengajuanCutiController@getCuti')->name('pengajuan.cuti');
     Route::get('/getstatus','PengajuanCutiController@getStatus')->name('pengajuan.status');
+    Route::get('/generateNumber','PengajuanCutiController@generateNumber')->name('pengajuan.number');
     Route::post('/store','PengajuanCutiController@store')->name('pengajuan.store');
     Route::get('/edit/{id}','PengajuanCutiController@edit')->name('pengajuan.edit');
     Route::put('/update/{id}','PengajuanCutiController@update')->name('pengajuan.update');
@@ -46,7 +47,9 @@ Route::group(['prefix' => 'pengajuan'],function(){
 
 Route::group(['prefix' => 'persetujuan'],function(){
     Route::get('/','PersetujuanCutiController@index')->name('persetujuan.index');
+    Route::get('/list','PersetujuanCutiController@list')->name('persetujuan.list');
     Route::get('/data','PersetujuanCutiController@data')->name('persetujuan.data');
+    Route::get('/listdata','PersetujuanCutiController@listdata')->name('persetujuan.listdata');
     Route::get('/detail/{id}','PersetujuanCutiController@detail')->name('persetujuan.detail');
     Route::put('/accept/{id}','PersetujuanCutiController@accept')->name('persetujuan.accept');
 });

@@ -84,8 +84,17 @@
                         <li class="">
                             <a class="" data-toggle="" href="{{route('cuti.index')}}"><i class="fa fa-group"></i><span class="sidebar-mini-hide">Data Master Cuti</span></a>
                         </li>
-                        <li class="">
-                            <a class="" data-toggle="" href="{{route('persetujuan.index')}}"><i class="fa fa-envelope-open"></i><span class="sidebar-mini-hide">Persetujuan Cuti</span></a>
+                        <li>
+                            <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-envelope-open"></i><span class="sidebar-mini-hide">Persetujuan Cuti</span></a>
+                            <ul>
+                                <li>
+                                    <a href="{{route('persetujuan.index')}}">List Persetujuan Cuti</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('persetujuan.list')}}">Riwayat Persetujuan Cuti</a>
+                                </li>
+
+                            </ul>
                         </li>
                     </ul>
                 </div>

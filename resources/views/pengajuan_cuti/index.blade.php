@@ -19,10 +19,10 @@
                 <th>Awal</th>
                 <th>Akhir</th>
                 <th>Cuti(Hari)</th>
-                <th>Keterangan</th>
+                <th>Ket</th>
                 <th>Status</th>
                 <th>Acc By</th>
-                <th>Ket</th>
+                <th>Ket_ACC</th>
                 <th>Action</th>
             </tr>
         </thead>

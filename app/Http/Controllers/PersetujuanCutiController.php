@@ -19,6 +19,11 @@ class PersetujuanCutiController extends Controller
 
         return view('persetujuan_cuti.index');
     }
+     public function list(Request $request)
+    {
+
+        return view('persetujuan_cuti.list');
+    }
 
     public function data()
     {
@@ -28,15 +33,51 @@ class PersetujuanCutiController extends Controller
                 ->addColumn('user_input',function($data){
                     return $data->pengaju->name;
                 })
+                ->addColumn('status',function($data){
+                    if($data->status == null)
+                    {
+                        $status = '<span class="badge badge-primary"><i class="fa fa-spinner mr-5"></i>WAITING !</span>';
+                        return $status;
+                    }
+
+
+                })
                 ->addColumn('action',function($row){
                     $aksi = '
                     <a href = "javascript:void(0)" data-id="'.$row->number.'" id="detail" class = " detail btn btn-sm btn-outline-primary mb-10">Detail</a>
                     ';
                     return $aksi;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action','status'])
                 ->make(true);
     }
+
+    public function listdata()
+    {
+        $data = Pengajuan::all();
+        return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('user_input',function($data){
+                    return $data->pengaju->name;
+                })
+                ->addColumn('status',function($pengajuan){
+                    if($pengajuan->status == '1')
+                    {
+                        $status = '<span class="badge badge-success"><i class="fa fa-check mr-5"></i>ACCEPTED !</span>';
+                        return $status;
+                    }else if($pengajuan->status == '0'){
+                        $status = '<span class="badge badge-danger"><i class="fa fa-times-circle mr-5"></i>Rejected</span>';
+                        return $status;
+                    }else{
+                        $status = '<span class="badge badge-primary"><i class="fa fa-spinner mr-5"></i>WAITING !</span>';
+                        return $status;
+                    }
+
+                })
+                ->rawColumns(['status'])
+                ->make(true);
+    }
+
     public function detail($id)
     {
         $data = Pengajuan::find($id);

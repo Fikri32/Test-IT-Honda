@@ -26,15 +26,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if(Auth::user()->hasRole('hrd'))
-        {
             $notification = Auth::user()->unreadNotifications;
             return view('dashboard',compact('notification'));
-        }else{
-            $data = Auth::user()->unreadNotifications;
-            // dd($data);
-            return view('dashboard',compact('data'));
-            }
 
     }
     public function markNotification(Request $request)
@@ -47,4 +40,5 @@ class HomeController extends Controller
             ->markAsRead();
         return response()->noContent();
     }
+
 }
